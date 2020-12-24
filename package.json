@@ -1,0 +1,28 @@
+{
+  "name": "ewash-api",
+  "version": "1.0.0",
+  "description": "Application for serving api for ewash cashier",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server",
+    "server": "nodemon server",
+    "debug": "DEBUG=express:* nodemon server.js"
+  },
+  "author": "Daffa Alfandy",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "bcryptjs": "^2.4.3",
+    "config": "^3.3.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.2",
+    "prompt": "^1.0.0",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.4"
+  }
+}
