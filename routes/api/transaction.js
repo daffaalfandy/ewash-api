@@ -27,4 +27,57 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  const date = req.query.d;
+  const month = req.query.m;
+  const year = req.query.y;
+  const type = req.query.data;
+
+  try {
+    let transaction;
+    if (type === "daily") {
+      transaction = await Transaction.find({
+        date,
+        month,
+        year,
+      }).sort({ createdAt: -1 });
+    }
+    if (type === "monthly") {
+      transaction = await Transaction.find({
+        month,
+        year,
+      });
+    }
+    if (type === "yearly") {
+      let data = [];
+      let items = await Transaction.find({ year }).sort({ createdAt: -1 });
+      let income = 0;
+      for (i = 0; i < items.length; i++) {
+        if (income === 0) {
+          income = items[i].total;
+        } else {
+          if (items[i].month === items[i - 1].month) {
+            income += items[i].total;
+          } else {
+            income = items[i].total;
+          }
+          if (i + 1 !== items.length) {
+            if (items[i].month !== items[i + 1].month) {
+              data.push({ month: items[i].month, income });
+            }
+          } else {
+            data.push({ month: items[i].month, income });
+          }
+        }
+      }
+      transaction = data;
+    }
+
+    return res.json({ transaction });
+  } catch (err) {
+    console.log(err.message);
+    req.status(500).send("Server error");
+  }
+});
+
 module.exports = router;
