@@ -47,6 +47,33 @@ router.get("/", async (req, res) => {
         month,
         year,
       });
+
+      let items = [];
+
+      transaction.forEach((trans) => {
+        trans.item.forEach((x) => {
+          let category = {
+            date: trans.date,
+            id: x.category._id,
+            name: x.category.category,
+            qty: Number(x.qty),
+            price: Number(x.price),
+          };
+          let available = false;
+
+          items.filter((item) => {
+            if (category.id === item.id && category.date === item.date) {
+              (item.qty += category.qty), (item.price += category.price);
+              available = true;
+            }
+          });
+
+          if (!available) {
+            items.push(category);
+          }
+        });
+      });
+      transaction = items;
     }
     if (type === "yearly") {
       let data = [];
